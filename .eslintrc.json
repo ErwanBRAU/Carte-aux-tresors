@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      { "singleQuote": true, "trailingComma": "none", "printWidth": 100 }
+    ],
+    "comma-dangle": ["error", "never"]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true,
+    "jest": true
+  }
+}
+
+// "plugins": ["@typescript-eslint", "prettier", "jest"],
