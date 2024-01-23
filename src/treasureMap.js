@@ -1,34 +1,68 @@
 const fs = require('fs');
-const { parse } = require('path');
+// const { argv } = require('node:process');
+// const { parse } = require('path');
 
+// const dataSet = {
+//   C: [3, 4],
+//   M: [
+//     [1, 0],
+//     [2, 1]
+//   ],
+//   T: [
+//     [0, 3, 2],
+//     [1, 3, 3]
+//   ],
+//   A: [['Lara', 1, 1, 'S', 'AADADAGGA']]
+// };
 class TreasureMap {
-  async getInputData(filePath) {
-    const inputData = new Promise((resolve) => {
-      const readFile = fs.createReadStream(filePath);
-      let datas = [];
-      readFile
-        .pipe(parse('\n'))
-        .on('data', (data) => {
-          console.log(222);
-          console.log(data);
-          datas += data;
-        })
-        .on('end', () => resolve(datas));
-    });
-    const result = await inputData;
-    return result;
-    // const dataMap = {};
+  formatInputData(filePath) {
+    const readFile = fs.readFileSync(filePath, 'utf8').trim().split('\n');
 
-    // try {
-    //   var data = fs.readFileSync(filePath, 'utf8');
-    //   console.log(data[0]);
-    //   return;
-    // } catch (e) {
-    //   console.log('Error:', e.stack);
-    // }
+    let formatData = { C: [], M: [], T: [], A: [] };
+
+    readFile.map((line) => {
+      const data = line.trim().split('-');
+      if (data[0].trim() === 'C') {
+        formatData['C'].push(parseInt(data[1].trim()), parseInt(data[2].trim()));
+      } else if (data[0].trim() === 'M') {
+        formatData['M'].push([parseInt(data[1].trim()), parseInt(data[2].trim())]);
+      } else if (data[0].trim() === 'T') {
+        formatData['T'].push([
+          parseInt(data[1].trim()),
+          parseInt(data[2].trim()),
+          parseInt(data[3].trim())
+        ]);
+      } else if (data[0].trim() === 'A') {
+        formatData['A'].push([
+          parseInt(data[2].trim()),
+          parseInt(data[3].trim()),
+          data[1].trim(),
+          data[4].trim(),
+          data[5].trim()
+        ]);
+      }
+      return line;
+    });
+
+    return formatData;
   }
+
+  // drawInputData(inputData) {}
 }
 
-const test = new TreasureMap();
+// const main = async () => {
+//   const test = new TreasureMap();
+//   const data = await test.formatInputData('./data/dataSet1.txt');
+//   console.log(data);
+// };
 
-console.log(test.getInputData('./data/dataSet1.txt'));
+// main();
+
+// // print process.argv
+// argv.forEach((val, index) => {
+//   console.log(`${index}: ${val}`);
+// });
+
+module.exports = {
+  TreasureMap
+};
