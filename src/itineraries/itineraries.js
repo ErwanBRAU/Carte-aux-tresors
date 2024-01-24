@@ -1,43 +1,80 @@
+const { Movements } = require('../movements/movements');
+const { MappingChecks } = require('../mappingChecks/mappingChecks');
+
+const movements = new Movements();
+const mappingChecks = new MappingChecks();
+
 class Itineraries {
-  forbiddenPositionsInsideMap(mapData, adventurer) {
-    let forbiddenPositions = [];
+  maxMovementsSequence(map) {
+    const adventurers = Object.keys(map['A']);
 
-    mapData['M'].map((moutainPosition) => forbiddenPositions.push(moutainPosition));
+    let lengthsMovementSequences = [];
+    adventurers.map((adventurer) => lengthsMovementSequences.push(map['A'][adventurer][4].length));
 
-    let allAdventurers = Object.keys(mapData['A']);
-    const otherAdventurers = allAdventurers.filter(
-      (otherAdventurer) => otherAdventurer !== adventurer
-    );
-
-    otherAdventurers.map((otherAdventurer) => {
-      const adventurerData = mapData['A'][otherAdventurer];
-      forbiddenPositions.push([adventurerData[0], adventurerData[1]]);
-    });
-
-    return forbiddenPositions;
+    const maxLengthMovementSequence = Math.max(...lengthsMovementSequences);
+    return maxLengthMovementSequence;
   }
 
-  isForbiddenPosition(map, position, forbiddenPositions) {
-    const xSizeMap = map['C'][0];
-    const ySizeMap = map['C'][1];
-    const xPosition = position[0];
-    const yPosition = position[1];
+  getLastPositions(map) {
+    let newMap = map;
+    const adventurers = Object.keys(map['A']);
+    const numberOfAdventurers = adventurers.length;
 
-    if (xPosition < 0 || xPosition >= xSizeMap) {
-      return true;
-    } else if (yPosition < 0 || yPosition >= ySizeMap) {
-      return true;
+    const maxLengthMovementSequence = this.maxMovementsSequence(map);
+    const itineraries = adventurers.map((adventurer) => map['A'][adventurer][4].split(''));
+
+    for (
+      let movementSequenceIteration = 0;
+      movementSequenceIteration < maxLengthMovementSequence;
+      movementSequenceIteration++
+    ) {
+      for (let adventurer = 0; adventurer < numberOfAdventurers; adventurer++) {
+        let adventurerName = adventurers[adventurer];
+
+        if (movementSequenceIteration < map['A'][adventurerName][4].length) {
+          let movement = itineraries[adventurer][movementSequenceIteration];
+
+          let adventurerInfo = newMap['A'][adventurerName];
+          let currentXPosition = adventurerInfo[0];
+          let currentYPosition = adventurerInfo[1];
+          let currentOrientation = adventurerInfo[3];
+
+          const nextPosition = movements.getNextPosition(
+            currentXPosition,
+            currentYPosition,
+            currentOrientation,
+            movement
+          );
+
+          const forbiddenPositions = mappingChecks.forbiddenPositionsInsideMap(
+            newMap,
+            adventurerName
+          );
+
+          const isForbidden = mappingChecks.isForbiddenPosition(
+            newMap,
+            nextPosition.slice(0, 2),
+            forbiddenPositions
+          );
+
+          if (!isForbidden) {
+            // const isTreasure = mappingChecks.getTreasures(newMap, nextPosition);
+            const newAdventurerInfo = [
+              nextPosition[0],
+              nextPosition[1],
+              0,
+              nextPosition[2],
+              adventurerInfo[4]
+            ];
+            const adventurersInfo = { ...newMap['A'], [adventurerName]: newAdventurerInfo };
+            newMap = { ...newMap, A: adventurersInfo };
+          }
+
+          console.log(adventurerName, newMap, movementSequenceIteration, adventurer);
+        }
+      }
     }
-
-    const isForbidden = forbiddenPositions.filter(
-      (forbiddenPosition) => JSON.stringify(forbiddenPosition) === JSON.stringify(position)
-    );
-
-    if (isForbidden.length > 0) {
-      return true;
-    }
-
-    return false;
+    return newMap;
   }
 }
 

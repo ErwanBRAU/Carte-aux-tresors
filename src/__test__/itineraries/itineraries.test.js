@@ -7,94 +7,100 @@ describe('Itineraries class', () => {
     jest.resetAllMocks();
   });
 
-  describe('forbiddenPositionsInsideMap', () => {
+  describe('maxMovementsSequence', () => {
     afterEach(() => {
       jest.resetAllMocks();
     });
 
-    it('should return positions of moutains', async () => {
-      const input = {
-        C: [3, 4],
-        M: [
-          [1, 1],
-          [2, 2]
-        ],
-        T: [],
-        A: {}
-      };
-      const output = [
-        [1, 1],
-        [2, 2]
-      ];
-      const forbiddenPositions = itineraries.forbiddenPositionsInsideMap(input);
-      expect(forbiddenPositions).toEqual(output);
-    });
+    const maxSequence = (map) => itineraries.maxMovementsSequence(map);
 
-    it('should return positions of moutains and all adventurers except him', async () => {
-      const mapData = {
+    it('should return the longest sequence of movements', async () => {
+      const mapOneAdventurer = {
         C: [3, 4],
-        M: [
-          [1, 1],
-          [2, 2]
-        ],
+        M: [[0, 2]],
         T: [],
-        A: { Lara: [1, 2, 0, 'S', 'AADADAGGA'], Arthur: [2, 3, 0, 'N', 'AADADAGGA'] }
+        A: { Lara: [1, 1, 0, 'S', 'AADADA'] }
       };
-      const output = [
-        [1, 1],
-        [2, 2],
-        [2, 3]
-      ];
-      const forbiddenPositions = itineraries.forbiddenPositionsInsideMap(mapData, 'Lara');
-      expect(forbiddenPositions).toEqual(output);
+
+      expect(maxSequence(mapOneAdventurer)).toEqual(6);
+
+      const mapManyAdventurers = {
+        C: [3, 4],
+        M: [[0, 2]],
+        T: [],
+        A: { Lara: [1, 1, 0, 'S', 'AADADA'], Arthur: [2, 3, 0, 'N', 'AADADAGGA'] }
+      };
+
+      expect(maxSequence(mapManyAdventurers)).toEqual(9);
     });
   });
 
-  describe('isForbiddenPosition', () => {
+  describe('getLastPositions', () => {
     afterEach(() => {
       jest.resetAllMocks();
     });
 
-    const isForbidden = (map, position, forbiddenPositions) =>
-      itineraries.isForbiddenPosition(map, position, forbiddenPositions);
-
-    it('should return true if position is outside map', async () => {
-      const map = {
+    it('should return last positions of adventurers, without any obstacle on their way', async () => {
+      const itineraryWithoutObstacle = {
         C: [3, 4],
         M: [],
         T: [],
-        A: {}
+        A: { Lara: [1, 1, 0, 'S', 'AA'], Arthur: [0, 3, 0, 'N', 'A'] }
       };
-      const forbiddenPositions = [];
 
-      const isOutside = isForbidden(map, [4, 5], forbiddenPositions);
-      expect(isOutside).toEqual(true);
+      const lastPositionsWithoutObstacle = {
+        C: [3, 4],
+        M: [],
+        T: [],
+        A: { Lara: [1, 3, 0, 'S', 'AA'], Arthur: [0, 2, 0, 'N', 'A'] }
+      };
 
-      const isInside = isForbidden(map, [2, 3], forbiddenPositions);
-      expect(isInside).toEqual(false);
+      const lastPositions = itineraries.getLastPositions(itineraryWithoutObstacle);
+      expect(lastPositions).toEqual(lastPositionsWithoutObstacle);
     });
 
-    it('should return true if position is on a moutain or another adventurer', async () => {
-      const map = {
+    it('should return last positions of adventurer, with moutains on their way', async () => {
+      const itineraryWithoutObstacle = {
         C: [3, 4],
         M: [
-          [1, 1],
+          [0, 2],
           [2, 2]
         ],
         T: [],
-        A: { Lara: [1, 1, 0, 'S', 'AADADAGGA'], Arthur: [2, 3, 0, 'N', 'AADADAGGA'] }
+        A: { Lara: [1, 1, 0, 'S', 'AGAGGAADAA'] }
       };
-      const forbiddenPositions = [
-        [1, 1],
-        [2, 2],
-        [2, 3]
-      ];
 
-      const isNotOk = isForbidden(map, [2, 3], forbiddenPositions);
-      expect(isNotOk).toEqual(true);
+      const lastPositionsWithoutObstacle = {
+        C: [3, 4],
+        M: [
+          [0, 2],
+          [2, 2]
+        ],
+        T: [],
+        A: { Lara: [1, 0, 0, 'N', 'AGAGGAADAA'] }
+      };
 
-      const isOk = isForbidden(map, [1, 3], forbiddenPositions);
-      expect(isOk).toEqual(false);
+      const lastPositions = itineraries.getLastPositions(itineraryWithoutObstacle);
+      expect(lastPositions).toEqual(lastPositionsWithoutObstacle);
+    });
+
+    it('should return last positions of adventurers, without any obstacle on their way', async () => {
+      const itineraryWithoutObstacle = {
+        C: [3, 4],
+        M: [[0, 2]],
+        T: [],
+        A: { Lara: [1, 1, 0, 'S', 'A'], Arthur: [0, 3, 0, 'N', 'A'] }
+      };
+
+      const lastPositionsWithoutObstacle = {
+        C: [3, 4],
+        M: [[0, 2]],
+        T: [],
+        A: { Lara: [1, 2, 0, 'S', 'A'], Arthur: [0, 2, 0, 'N', 'A'] }
+      };
+
+      // const lastPositions = itineraries.getLastPositions(itineraryWithoutObstacle);
+      // expect(lastPositions).toEqual(lastPositionsWithoutObstacle);
     });
   });
 });

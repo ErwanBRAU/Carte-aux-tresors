@@ -22,11 +22,17 @@ describe('Movements class', () => {
     });
 
     it('should get the next orientation when movement D or G is given', async () => {
-      const leftOrientation = getOrientation('N', 'G');
+      let leftOrientation = getOrientation('N', 'G');
       expect(leftOrientation).toEqual('W');
 
-      const rightOrientation = getOrientation('E', 'D');
+      leftOrientation = getOrientation('E', 'G');
+      expect(leftOrientation).toEqual('N');
+
+      let rightOrientation = getOrientation('E', 'D');
       expect(rightOrientation).toEqual('S');
+
+      rightOrientation = getOrientation('N', 'D');
+      expect(rightOrientation).toEqual('E');
     });
   });
 
@@ -45,19 +51,22 @@ describe('Movements class', () => {
     };
 
     it('should get the same orientation but different position when movement A is given', async () => {
-      const leftMovement = getPosition(1, 2, 'W', 'A');
-      expect(leftMovement).toEqual([0, 2, 'W']);
+      const westMovement = getPosition(1, 2, 'W', 'A');
+      expect(westMovement).toEqual([0, 2, 'W']);
 
-      const topMovement = getPosition(1, 2, 'N', 'A');
-      expect(topMovement).toEqual([1, 1, 'N']);
+      const northMovement = getPosition(1, 2, 'N', 'A');
+      expect(northMovement).toEqual([1, 1, 'N']);
+
+      const eastMovement = getPosition(1, 1, 'E', 'A');
+      expect(eastMovement).toEqual([2, 1, 'E']);
     });
 
     it('should get the same position but different orientation when movement D or G is given', async () => {
-      const leftTurnMovement = getPosition(1, 2, 'W', 'G');
-      expect(leftTurnMovement).toEqual([1, 2, 'S']);
+      const westTurnMovement = getPosition(1, 2, 'W', 'G');
+      expect(westTurnMovement).toEqual([1, 2, 'S']);
 
-      const rightTurnMovement = getPosition(1, 2, 'W', 'D');
-      expect(rightTurnMovement).toEqual([1, 2, 'N']);
+      const eastTurnMovement = getPosition(1, 2, 'W', 'D');
+      expect(eastTurnMovement).toEqual([1, 2, 'N']);
     });
   });
 });
