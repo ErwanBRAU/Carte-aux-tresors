@@ -60,7 +60,7 @@ describe('Itineraries class', () => {
     });
 
     it('should return last positions of adventurer, with moutains on their way', async () => {
-      const itineraryWithoutObstacle = {
+      const itineraryWithMountains = {
         C: [3, 4],
         M: [
           [0, 2],
@@ -70,7 +70,7 @@ describe('Itineraries class', () => {
         A: { Lara: [1, 1, 0, 'S', 'AGAGGAADAA'] }
       };
 
-      const lastPositionsWithoutObstacle = {
+      const lastPositionsWithMoutains = {
         C: [3, 4],
         M: [
           [0, 2],
@@ -80,27 +80,89 @@ describe('Itineraries class', () => {
         A: { Lara: [1, 0, 0, 'N', 'AGAGGAADAA'] }
       };
 
-      const lastPositions = itineraries.getLastPositions(itineraryWithoutObstacle);
-      expect(lastPositions).toEqual(lastPositionsWithoutObstacle);
+      const lastPositions = itineraries.getLastPositions(itineraryWithMountains);
+      expect(lastPositions).toEqual(lastPositionsWithMoutains);
     });
 
-    it('should return last positions of adventurers, without any obstacle on their way', async () => {
-      const itineraryWithoutObstacle = {
+    it('should return last positions of adventurers, with adventurers position conflicts and moutains', async () => {
+      const itineraryWithAdventurersConflicts = {
         C: [3, 4],
-        M: [[0, 2]],
+        M: [
+          [0, 2],
+          [2, 2]
+        ],
         T: [],
-        A: { Lara: [1, 1, 0, 'S', 'A'], Arthur: [0, 3, 0, 'N', 'A'] }
+        A: { Lara: [1, 1, 0, 'W', 'AGAGADDA'], Arthur: [1, 2, 0, 'N', 'ADADADAA'] }
       };
 
-      const lastPositionsWithoutObstacle = {
+      const lastPositionsWithAdventurersConflicts = {
         C: [3, 4],
-        M: [[0, 2]],
+        M: [
+          [0, 2],
+          [2, 2]
+        ],
         T: [],
-        A: { Lara: [1, 2, 0, 'S', 'A'], Arthur: [0, 2, 0, 'N', 'A'] }
+        A: { Lara: [0, 1, 0, 'W', 'AGAGADDA'], Arthur: [1, 1, 0, 'W', 'ADADADAA'] }
       };
 
-      // const lastPositions = itineraries.getLastPositions(itineraryWithoutObstacle);
-      // expect(lastPositions).toEqual(lastPositionsWithoutObstacle);
+      const lastPositions = itineraries.getLastPositions(itineraryWithAdventurersConflicts);
+      expect(lastPositions).toEqual(lastPositionsWithAdventurersConflicts);
+    });
+
+    it('should return last positions of adventurers, with correct numbers of treasures without any conflict', async () => {
+      const itineraryWithTreasures = {
+        C: [3, 4],
+        M: [],
+        T: [
+          [0, 2, 2],
+          [2, 2, 3]
+        ],
+        A: { Lara: [0, 1, 0, 'S', 'AGAADAA'], Arthur: [2, 3, 0, 'N', 'AAGAAGA'] }
+      };
+
+      const lastPositionsWithTreasures = {
+        C: [3, 4],
+        M: [],
+        T: [
+          [0, 2, 0],
+          [2, 2, 1]
+        ],
+        A: { Lara: [2, 3, 2, 'S', 'AGAADAA'], Arthur: [0, 2, 2, 'S', 'AAGAAGA'] }
+      };
+
+      const lastPositions = itineraries.getLastPositions(itineraryWithTreasures);
+      expect(lastPositions).toEqual(lastPositionsWithTreasures);
+    });
+
+    it('should return last positions of adventurers, with conflicts and correct numbers of treasures', async () => {
+      const itineraryWithTreasuresAndConflicts = {
+        C: [3, 4],
+        M: [
+          [1, 0],
+          [2, 1]
+        ],
+        T: [
+          [0, 3, 2],
+          [1, 3, 3]
+        ],
+        A: { Lara: [1, 1, 0, 'S', 'AADADAGGA'], Arthur: [2, 2, 0, 'W', 'AGADADGAA'] }
+      };
+
+      const lastPositionsWithTreasuresAndConflicts = {
+        C: [3, 4],
+        M: [
+          [1, 0],
+          [2, 1]
+        ],
+        T: [
+          [0, 3, 0],
+          [1, 3, 1]
+        ],
+        A: { Lara: [0, 2, 2, 'S', 'AADADAGGA'], Arthur: [0, 3, 2, 'W', 'AGADADGAA'] }
+      };
+
+      const lastPositions = itineraries.getLastPositions(itineraryWithTreasuresAndConflicts);
+      expect(lastPositions).toEqual(lastPositionsWithTreasuresAndConflicts);
     });
   });
 });

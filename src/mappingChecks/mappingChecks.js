@@ -39,21 +39,6 @@ class MappingChecks {
 
     return false;
   }
-
-  getTreasures(map, position) {
-    const allTreasures = map['T'];
-
-    const treasures = allTreasures.filter(
-      (treasure) => JSON.stringify(treasure.slice(0, 2)) === JSON.stringify(position)
-    );
-
-    if (treasures.length > 0) {
-      if (treasures[0][2] > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
 
 module.exports = { MappingChecks };

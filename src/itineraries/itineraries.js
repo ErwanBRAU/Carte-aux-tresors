@@ -1,8 +1,10 @@
 const { Movements } = require('../movements/movements');
 const { MappingChecks } = require('../mappingChecks/mappingChecks');
+const { Treasures } = require('../treasures/treasures');
 
 const movements = new Movements();
 const mappingChecks = new MappingChecks();
+const treasures = new Treasures();
 
 class Itineraries {
   maxMovementsSequence(map) {
@@ -17,11 +19,12 @@ class Itineraries {
 
   getLastPositions(map) {
     let newMap = map;
-    const adventurers = Object.keys(map['A']);
+
+    const adventurers = Object.keys(newMap['A']);
     const numberOfAdventurers = adventurers.length;
 
-    const maxLengthMovementSequence = this.maxMovementsSequence(map);
-    const itineraries = adventurers.map((adventurer) => map['A'][adventurer][4].split(''));
+    const maxLengthMovementSequence = this.maxMovementsSequence(newMap);
+    const itineraries = adventurers.map((adventurer) => newMap['A'][adventurer][4].split(''));
 
     for (
       let movementSequenceIteration = 0;
@@ -31,13 +34,13 @@ class Itineraries {
       for (let adventurer = 0; adventurer < numberOfAdventurers; adventurer++) {
         let adventurerName = adventurers[adventurer];
 
-        if (movementSequenceIteration < map['A'][adventurerName][4].length) {
+        if (movementSequenceIteration < newMap['A'][adventurerName][4].length) {
           let movement = itineraries[adventurer][movementSequenceIteration];
 
-          let adventurerInfo = newMap['A'][adventurerName];
-          let currentXPosition = adventurerInfo[0];
-          let currentYPosition = adventurerInfo[1];
-          let currentOrientation = adventurerInfo[3];
+          let adventurerInformation = newMap['A'][adventurerName];
+          let currentXPosition = adventurerInformation[0];
+          let currentYPosition = adventurerInformation[1];
+          let currentOrientation = adventurerInformation[3];
 
           const nextPosition = movements.getNextPosition(
             currentXPosition,
@@ -58,19 +61,44 @@ class Itineraries {
           );
 
           if (!isForbidden) {
-            // const isTreasure = mappingChecks.getTreasures(newMap, nextPosition);
+            const isTreasure = treasures.getTreasure(
+              newMap,
+              nextPosition.slice(0, 2),
+              adventurerName,
+              movement
+            );
+
             const newAdventurerInfo = [
               nextPosition[0],
               nextPosition[1],
-              0,
+              isTreasure[0],
               nextPosition[2],
-              adventurerInfo[4]
+              adventurerInformation[4]
             ];
             const adventurersInfo = { ...newMap['A'], [adventurerName]: newAdventurerInfo };
+
+            // let allTreasures = newMap['T'];
+            // console.log(allTreasures);
+            // console.log('111111111111111111');
+            // console.log(allTreasures);
+            // console.log(isTreasure);
+            // let treasurePosition = allTreasures.findIndex(
+            //   (treasure) =>
+            //     JSON.stringify(treasure.slice(0, 2)) !== JSON.stringify(isTreasure[1].slice(0, 2))
+            // );
+            // console.log('222222222222222');
+            // console.log(treasurePosition);
+
+            // // if (treasurePosition !== -1) {
+            // //   console.log(true);
+            // //   allTreasures.slice(treasurePosition, 1, isTreasure[1]).push('eeeeeeeeeeeee');
+            // // }
+            // console.log('3333333333333333333');
+            // console.log(allTreasures);
             newMap = { ...newMap, A: adventurersInfo };
           }
 
-          console.log(adventurerName, newMap, movementSequenceIteration, adventurer);
+          // console.log(adventurerName, newMap, movementSequenceIteration, adventurer);
         }
       }
     }

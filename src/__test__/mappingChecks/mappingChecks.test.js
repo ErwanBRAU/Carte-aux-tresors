@@ -100,31 +100,4 @@ describe('Mapping Checks class', () => {
       expect(isOk).toEqual(false);
     });
   });
-
-  describe('getTreasures', () => {
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('should return true if there is a trasure where the adventurer is', async () => {
-      const map = {
-        C: [3, 4],
-        M: [],
-        T: [
-          [0, 3, 2],
-          [3, 3, 0]
-        ],
-        A: {}
-      };
-
-      const noTreasure = mappingChecks.getTreasures(map, [1, 2]);
-      expect(noTreasure).toEqual(false);
-
-      const treasure = mappingChecks.getTreasures(map, [0, 3]);
-      expect(treasure).toEqual(true);
-
-      const emptyTreasure = mappingChecks.getTreasures(map, [3, 3]);
-      expect(emptyTreasure).toEqual(false);
-    });
-  });
 });
