@@ -77,28 +77,17 @@ class Itineraries {
             ];
             const adventurersInfo = { ...newMap['A'], [adventurerName]: newAdventurerInfo };
 
-            // let allTreasures = newMap['T'];
-            // console.log(allTreasures);
-            // console.log('111111111111111111');
-            // console.log(allTreasures);
-            // console.log(isTreasure);
-            // let treasurePosition = allTreasures.findIndex(
-            //   (treasure) =>
-            //     JSON.stringify(treasure.slice(0, 2)) !== JSON.stringify(isTreasure[1].slice(0, 2))
-            // );
-            // console.log('222222222222222');
-            // console.log(treasurePosition);
+            let allTreasures = newMap['T'];
+            let treasurePosition = allTreasures.findIndex(
+              (treasure) =>
+                JSON.stringify(treasure.slice(0, 2)) === JSON.stringify(isTreasure[1].slice(0, 2))
+            );
+            if (treasurePosition !== -1) {
+              allTreasures.splice(treasurePosition, 1, isTreasure[1]);
+            }
 
-            // // if (treasurePosition !== -1) {
-            // //   console.log(true);
-            // //   allTreasures.slice(treasurePosition, 1, isTreasure[1]).push('eeeeeeeeeeeee');
-            // // }
-            // console.log('3333333333333333333');
-            // console.log(allTreasures);
-            newMap = { ...newMap, A: adventurersInfo };
+            newMap = { ...newMap, T: allTreasures, A: adventurersInfo };
           }
-
-          // console.log(adventurerName, newMap, movementSequenceIteration, adventurer);
         }
       }
     }

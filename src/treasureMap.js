@@ -1,4 +1,4 @@
-// const { argv } = require('node:process');
+const { argv } = require('node:process');
 const { FileManager } = require('./fileManager/fileManager');
 const { Itineraries } = require('./itineraries/itineraries');
 
@@ -6,29 +6,26 @@ const fileManager = new FileManager();
 const itineraries = new Itineraries();
 
 class TreasureMap {
-  treasureMapResolution(filePath) {
-    const map = fileManager.formatInputData(filePath);
+  treasureMapResolution(inputFilePath, outputFilepath) {
+    const map = fileManager.formatInputData(inputFilePath);
 
     const lastPositions = itineraries.getLastPositions(map);
 
-    return lastPositions;
-  }
+    const outputData = fileManager.formatOuputData(lastPositions, outputFilepath);
 
-  // drawInputData(inputData) {}
+    return outputData;
+  }
 }
 
-// const main = async () => {
-//   const test = new TreasureMap();
-//   const data = await test.formatInputData('./data/dataSet1.txt');
-//   console.log(data);
-// };
+const main = async () => {
+  const treasureMap = new TreasureMap();
+  const filepathInput = argv[2] || '../data/wordingData.txt';
+  const filepathOuput = argv[3] || '../data/solvedWording.txt';
+  const data = await treasureMap.treasureMapResolution(filepathInput, filepathOuput);
+  console.log(data);
+};
 
-// main();
-
-// // print process.argv
-// argv.forEach((val, index) => {
-//   console.log(`${index}: ${val}`);
-// });
+main();
 
 module.exports = {
   TreasureMap

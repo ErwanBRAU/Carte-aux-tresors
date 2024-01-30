@@ -23,8 +23,9 @@ class Treasures {
     let adventurerTreasures = map['A'][adventurer][2];
 
     if (isTreasure && movement === 'A') {
-      treasurePosition = treasure[1];
       adventurerTreasures += 1;
+
+      treasurePosition = [...treasure[1]];
       treasurePosition[2] -= 1;
     }
 

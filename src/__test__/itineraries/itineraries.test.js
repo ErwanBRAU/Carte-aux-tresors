@@ -1,6 +1,12 @@
 const { Itineraries } = require('../../itineraries/itineraries');
+const { Treasures } = require('../../treasures/treasures');
+const { Movements } = require('../../movements/movements');
+const { MappingChecks } = require('../../mappingChecks/mappingChecks');
 
 const itineraries = new Itineraries();
+const treasures = new Treasures();
+const movements = new Movements();
+const mappingChecks = new MappingChecks();
 
 describe('Itineraries class', () => {
   afterEach(() => {
@@ -38,6 +44,36 @@ describe('Itineraries class', () => {
   describe('getLastPositions', () => {
     afterEach(() => {
       jest.resetAllMocks();
+    });
+
+    it('should call all other class methods', async () => {
+      const map = {
+        C: [3, 4],
+        M: [
+          [1, 0],
+          [2, 1]
+        ],
+        T: [
+          [0, 3, 2],
+          [1, 3, 3]
+        ],
+        A: { Lara: [1, 1, 0, 'S', 'A'] }
+      };
+      jest.spyOn(itineraries, 'maxMovementsSequence').mockReturnValueOnce(1);
+      jest.spyOn(movements, 'getNextPosition').mockReturnValueOnce([1, 2, 'S']);
+      jest.spyOn(mappingChecks, 'forbiddenPositionsInsideMap').mockReturnValueOnce([
+        [1, 0],
+        [2, 1]
+      ]);
+      jest.spyOn(mappingChecks, 'isForbiddenPosition').mockReturnValueOnce(false);
+      jest.spyOn(treasures, 'getTreasure').mockReturnValueOnce([0, []]);
+
+      itineraries.getLastPositions(map);
+      expect(itineraries.maxMovementsSequence).toBeCalledTimes(1);
+      expect(movements.getNextPosition).toBeCalledTimes(1);
+      expect(mappingChecks.forbiddenPositionsInsideMap).toBeCalledTimes(1);
+      expect(mappingChecks.isForbiddenPosition).toBeCalledTimes(1);
+      expect(treasures.getTreasure).toBeCalledTimes(1);
     });
 
     it('should return last positions of adventurers, without any obstacle on their way', async () => {
