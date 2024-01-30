@@ -1,0 +1,260 @@
+{
+  "treasures.test.js": {
+    "randomMap": {
+      "C": [3, 4],
+      "M": [
+        [1, 0],
+        [2, 1]
+      ],
+      "T": [
+        [0, 3, 2],
+        [1, 3, 3]
+      ],
+      "A": { "Lara": [1, 2, 0, "S", "A"] }
+    },
+    "map": {
+      "C": [3, 4],
+      "M": [],
+      "T": [
+        [0, 3, 2],
+        [3, 3, 0]
+      ],
+      "A": { "Lara": [1, 3, 0, "S", "AA"], "Arthur": [1, 3, 2, "S", "AA"] }
+    }
+  },
+  "mappingChecks.test.js": {
+    "input": {
+      "C": [3, 4],
+      "M": [
+        [1, 1],
+        [2, 2]
+      ],
+      "T": [],
+      "A": {}
+    },
+    "output": [
+      [1, 1],
+      [2, 2]
+    ],
+    "mapData": {
+      "C": [3, 4],
+      "M": [
+        [1, 1],
+        [2, 2]
+      ],
+      "T": [],
+      "A": {
+        "Lara": [1, 2, 0, "S", "AADADAGGA"],
+        "Arthur": [2, 3, 0, "N", "AADADAGGA"]
+      }
+    },
+    "outputWithMoutainsAndAdventurers": [
+      [1, 1],
+      [2, 2],
+      [2, 3]
+    ],
+    "map": {
+      "C": [3, 4],
+      "M": [
+        [1, 1],
+        [2, 2]
+      ],
+      "T": [],
+      "A": {
+        "Lara": [1, 1, 0, "S", "AADADAGGA"],
+        "Arthur": [2, 3, 0, "N", "AADADAGGA"]
+      }
+    },
+    "forbiddenPositions": [
+      [1, 1],
+      [2, 2],
+      [2, 3]
+    ]
+  },
+  "fileManager.test.js": {
+    "mapData": {
+      "C": [3, 4],
+      "M": [
+        [1, 1],
+        [2, 2]
+      ],
+      "T": [
+        [0, 3, 2],
+        [1, 3, 1]
+      ],
+      "A": {
+        "Lara": [1, 1, 0, "S", "AADADAGGA"],
+        "Arthur": [2, 3, 0, "W", "AGADADAGG"]
+      }
+    },
+    "map": {
+      "C": [3, 4],
+      "M": [
+        [1, 0],
+        [2, 1]
+      ],
+      "T": [
+        [0, 3, 4],
+        [1, 3, 1],
+        [2, 2, 0]
+      ],
+      "A": {
+        "Lara": [0, 2, 2, "S", "AADADAGGA"],
+        "Arthur": [0, 3, 2, "W", "AGADADGAA"]
+      }
+    },
+    "randomMap": {
+      "C": [3, 4],
+      "M": [
+        [1, 0],
+        [2, 1]
+      ],
+      "T": [
+        [0, 3, 4],
+        [1, 3, 1],
+        [2, 2, 0]
+      ],
+      "A": {
+        "Lara": [0, 2, 2, "S", "AADADAGGA"],
+        "Arthur": [0, 3, 2, "W", "AGADADGAA"]
+      }
+    }
+  },
+  "itineraries.test.js": {
+    "mapOneAdventurer": {
+      "C": [3, 4],
+      "M": [[0, 2]],
+      "T": [],
+      "A": { "Lara": [1, 1, 0, "S", "AADADA"] }
+    },
+    "mapManyAdventurers": {
+      "C": [3, 4],
+      "M": [[0, 2]],
+      "T": [],
+      "A": {
+        "Lara": [1, 1, 0, "S", "AADADA"],
+        "Arthur": [2, 3, 0, "N", "AADADAGGA"]
+      }
+    },
+    "randomMap": {
+      "C": [3, 4],
+      "M": [
+        [1, 0],
+        [2, 1]
+      ],
+      "T": [
+        [0, 3, 2],
+        [1, 3, 3]
+      ],
+      "A": { "Lara": [1, 1, 0, "S", "A"] }
+    },
+    "itineraryWithoutObstacle": {
+      "C": [3, 4],
+      "M": [],
+      "T": [],
+      "A": { "Lara": [1, 1, 0, "S", "AA"], "Arthur": [0, 3, 0, "N", "A"] }
+    },
+    "lastPositionsWithoutObstacle": {
+      "C": [3, 4],
+      "M": [],
+      "T": [],
+      "A": { "Lara": [1, 3, 0, "S", "AA"], "Arthur": [0, 2, 0, "N", "A"] }
+    },
+    "itineraryWithMountains": {
+      "C": [3, 4],
+      "M": [
+        [0, 2],
+        [2, 2]
+      ],
+      "T": [],
+      "A": { "Lara": [1, 1, 0, "S", "AGAGGAADAA"] }
+    },
+    "lastPositionsWithMoutains": {
+      "C": [3, 4],
+      "M": [
+        [0, 2],
+        [2, 2]
+      ],
+      "T": [],
+      "A": { "Lara": [1, 0, 0, "N", "AGAGGAADAA"] }
+    },
+    "itineraryWithAdventurersConflicts": {
+      "C": [3, 4],
+      "M": [
+        [0, 2],
+        [2, 2]
+      ],
+      "T": [],
+      "A": {
+        "Lara": [1, 1, 0, "W", "AGAGADDA"],
+        "Arthur": [1, 2, 0, "N", "ADADADAA"]
+      }
+    },
+    "lastPositionsWithAdventurersConflicts": {
+      "C": [3, 4],
+      "M": [
+        [0, 2],
+        [2, 2]
+      ],
+      "T": [],
+      "A": {
+        "Lara": [0, 1, 0, "W", "AGAGADDA"],
+        "Arthur": [1, 1, 0, "W", "ADADADAA"]
+      }
+    },
+    "itineraryWithTreasures": {
+      "C": [3, 4],
+      "M": [],
+      "T": [
+        [0, 2, 2],
+        [2, 2, 3]
+      ],
+      "A": {
+        "Lara": [0, 1, 0, "S", "AGAADAA"],
+        "Arthur": [2, 3, 0, "N", "AAGAAGA"]
+      }
+    },
+    "lastPositionsWithTreasures": {
+      "C": [3, 4],
+      "M": [],
+      "T": [
+        [0, 2, 0],
+        [2, 2, 1]
+      ],
+      "A": {
+        "Lara": [2, 3, 2, "S", "AGAADAA"],
+        "Arthur": [0, 2, 2, "S", "AAGAAGA"]
+      }
+    },
+    "itineraryWithTreasuresAndConflicts": {
+      "C": [3, 4],
+      "M": [
+        [1, 0],
+        [2, 1]
+      ],
+      "T": [
+        [0, 3, 2],
+        [1, 3, 3]
+      ],
+      "A": {
+        "Lara": [1, 1, 0, "S", "AADADAGGA"],
+        "Arthur": [2, 2, 0, "W", "AGADADGAA"]
+      }
+    },
+    "lastPositionsWithTreasuresAndConflicts": {
+      "C": [3, 4],
+      "M": [
+        [1, 0],
+        [2, 1]
+      ],
+      "T": [
+        [0, 3, 0],
+        [1, 3, 1]
+      ],
+      "A": {
+        "Lara": [0, 2, 2, "S", "AADADAGGA"],
+        "Arthur": [0, 3, 2, "W", "AGADADGAA"]
+      }
+    }
+  }
+}

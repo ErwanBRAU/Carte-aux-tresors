@@ -1,3 +1,4 @@
+const { ['fileManager.test.js']: mockedTestsData } = require('../data/testsData.json');
 const fs = require('fs');
 const { FileManager } = require('../../fileManager/fileManager');
 
@@ -22,18 +23,7 @@ describe('File Manager class', () => {
 
     it('should create an object with all data', async () => {
       const dataSet = './data/dataSet2.txt';
-      const mapData = {
-        C: [3, 4],
-        M: [
-          [1, 1],
-          [2, 2]
-        ],
-        T: [
-          [0, 3, 2],
-          [1, 3, 1]
-        ],
-        A: { Lara: [1, 1, 0, 'S', 'AADADAGGA'], Arthur: [2, 3, 0, 'W', 'AGADADAGG'] }
-      };
+      const mapData = mockedTestsData.mapData;
       const result = fileManager.formatInputData(dataSet);
       expect(result).toEqual(mapData);
     });
@@ -56,19 +46,7 @@ describe('File Manager class', () => {
     });
 
     it('should return the output data, basing on a map object', async () => {
-      const mapData = {
-        C: [3, 4],
-        M: [
-          [1, 0],
-          [2, 1]
-        ],
-        T: [
-          [0, 3, 4],
-          [1, 3, 1],
-          [2, 2, 0]
-        ],
-        A: { Lara: [0, 2, 2, 'S', 'AADADAGGA'], Arthur: [0, 3, 2, 'W', 'AGADADGAA'] }
-      };
+      const mapData = mockedTestsData.map;
 
       const outputData = `C - 3 - 4
 M - 1 - 0
@@ -80,6 +58,17 @@ A - Arthur - 0 - 3 - W - 2
 `;
       const result = fileManager.formatOuputData(mapData);
       expect(result).toEqual(outputData);
+    });
+
+    it('should fail when writting into the file and enter into catch part', async () => {
+      const map = mockedTestsData.randomMap;
+      const error = 'Folder not found';
+      jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {
+        throw Error(error);
+      });
+
+      const result = fileManager.formatOuputData(map);
+      expect(result).toEqual(error);
     });
   });
 });

@@ -1,10 +1,14 @@
+const { ['treasures.test.js']: mockedTestsData } = require('../data/testsData.json');
 const { Treasures } = require('../../treasures/treasures');
 
-const treasures = new Treasures();
+let treasures;
 
 describe('Treasures class', () => {
   afterEach(() => {
     jest.resetAllMocks();
+  });
+  beforeEach(() => {
+    treasures = new Treasures();
   });
 
   describe('isTreasure', () => {
@@ -39,16 +43,17 @@ describe('Treasures class', () => {
       jest.resetAllMocks();
     });
 
+    it('should call isTreasure method from the Treasures class', async () => {
+      const map = mockedTestsData.randomMap;
+
+      jest.spyOn(treasures, 'isTreasure').mockReturnValueOnce([true, [1, 3, 3]]);
+
+      treasures.getTreasure(map, [1, 3], 'Lara', 'A');
+      expect(treasures.isTreasure).toBeCalledTimes(1);
+    });
+
     it('should return adventurer information with one treasure if one is on his way', async () => {
-      const map = {
-        C: [3, 4],
-        M: [],
-        T: [
-          [0, 3, 2],
-          [3, 3, 0]
-        ],
-        A: { Lara: [1, 3, 0, 'S', 'AA'], Arthur: [1, 3, 2, 'S', 'AA'] }
-      };
+      const map = mockedTestsData.map;
 
       const noTreasure = treasures.getTreasure(map, [1, 3], 'Lara', 'A');
       expect(noTreasure).toEqual([0, []]);

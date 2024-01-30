@@ -101,18 +101,15 @@ class FileManager {
 
     const drawingMapString = drawingMap.render(rows);
 
-    fs.writeFileSync(
-      outputFilepath || './data/dataOutput.txt',
-      `${outputData}
-      ${drawingMapString}`,
-      (error) => {
-        if (error) {
-          throw new Error(error);
-        } else {
-          console.error('File written successfully');
-        }
-      }
-    );
+    try {
+      fs.writeFileSync(
+        outputFilepath || './data/dataOutput.txt',
+        `${outputData}
+      ${drawingMapString}`
+      );
+    } catch (error) {
+      return error.message;
+    }
 
     return outputData;
   }

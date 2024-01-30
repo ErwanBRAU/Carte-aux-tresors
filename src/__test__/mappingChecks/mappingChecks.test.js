@@ -1,3 +1,4 @@
+const { ['mappingChecks.test.js']: mockedTestsData } = require('../data/testsData.json');
 const { MappingChecks } = require('../../mappingChecks/mappingChecks');
 
 const mappingChecks = new MappingChecks();
@@ -13,38 +14,15 @@ describe('Mapping Checks class', () => {
     });
 
     it('should return positions of moutains', async () => {
-      const input = {
-        C: [3, 4],
-        M: [
-          [1, 1],
-          [2, 2]
-        ],
-        T: [],
-        A: {}
-      };
-      const output = [
-        [1, 1],
-        [2, 2]
-      ];
+      const input = mockedTestsData.input;
+      const output = mockedTestsData.output;
       const forbiddenPositions = mappingChecks.forbiddenPositionsInsideMap(input);
       expect(forbiddenPositions).toEqual(output);
     });
 
     it('should return positions of moutains and all adventurers except him', async () => {
-      const mapData = {
-        C: [3, 4],
-        M: [
-          [1, 1],
-          [2, 2]
-        ],
-        T: [],
-        A: { Lara: [1, 2, 0, 'S', 'AADADAGGA'], Arthur: [2, 3, 0, 'N', 'AADADAGGA'] }
-      };
-      const output = [
-        [1, 1],
-        [2, 2],
-        [2, 3]
-      ];
+      const mapData = mockedTestsData.mapData;
+      const output = mockedTestsData.outputWithMoutainsAndAdventurers;
       const forbiddenPositions = mappingChecks.forbiddenPositionsInsideMap(mapData, 'Lara');
       expect(forbiddenPositions).toEqual(output);
     });
@@ -78,20 +56,8 @@ describe('Mapping Checks class', () => {
     });
 
     it('should return true if position is on a moutain or another adventurer', async () => {
-      const map = {
-        C: [3, 4],
-        M: [
-          [1, 1],
-          [2, 2]
-        ],
-        T: [],
-        A: { Lara: [1, 1, 0, 'S', 'AADADAGGA'], Arthur: [2, 3, 0, 'N', 'AADADAGGA'] }
-      };
-      const forbiddenPositions = [
-        [1, 1],
-        [2, 2],
-        [2, 3]
-      ];
+      const map = mockedTestsData.map;
+      const forbiddenPositions = mockedTestsData.forbiddenPositions;
 
       const isNotOk = isForbidden(map, [2, 3], forbiddenPositions);
       expect(isNotOk).toEqual(true);
