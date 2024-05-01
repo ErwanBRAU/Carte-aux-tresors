@@ -9,4 +9,4 @@ Si aucune valeur n'est entrée, le code attribue par défaut les valeurs :
 - `emplacement du fichier d'entrée` = '../data/wordingData.txt'
 - `emplacement du fichier de sortie` = '../data/solvedWording.txt'
 
-Pour lancer les tests, se positionner dans le dossier parent du projet et lancer la commande `npm tun testJest`.
+Pour lancer les tests, se positionner dans le dossier parent du projet et lancer la commande `npm run testJest`.
